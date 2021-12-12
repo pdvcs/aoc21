@@ -1,3 +1,9 @@
+# IDE and buildtool cruft
+.idea/
+.gradle/
+gradle/
+build/
+
 # Compiled class file
 *.class
 
