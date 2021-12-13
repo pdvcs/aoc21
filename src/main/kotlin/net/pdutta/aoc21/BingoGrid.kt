@@ -59,7 +59,7 @@ class BingoGrid(private val rows: Int, private val columns: Int) {
         val output = StringBuffer()
         for (r in eachRow()) {
             r.forEach { c ->
-                output.append(c.num).append(if (c.marked) "*" else " ").append(" ")
+                output.append("%3d".format(c.num)).append(if (c.marked) "*" else " ").append(" ")
             }
             output.append("\n")
         }
