@@ -7,8 +7,8 @@ fun reverseBingo(input: String): Int {
     val completedGridIndices = hashMapOf<Int, Boolean>()
     for (n in numbers) {
         if (numberMap.containsKey(n)) {
-            for (triple in numberMap[n]!!) {
-                grids[triple.first][triple.second, triple.third]?.marked = true
+            for ((gridId, row, column) in numberMap[n]!!) {
+                grids[gridId][row, column]?.marked = true
             }
             for (x in grids.indices) {
                 val g = grids[x]
@@ -30,10 +30,8 @@ fun bingoGame(input: String): Int {
     val (numbers, grids, numberMap) = parseBingoInput(input)
     for (n in numbers) {
         if (numberMap.containsKey(n)) {
-            for (triple in numberMap[n]!!) {
-                // each int in the Triple is a zero-based number:
-                //      gridId, row, column
-                grids[triple.first][triple.second, triple.third]?.marked = true
+            for ((gridId, row, column) in numberMap[n]!!) {
+                grids[gridId][row, column]?.marked = true
             }
             for (x in grids.indices) {
                 val g = grids[x]
