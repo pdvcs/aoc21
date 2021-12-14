@@ -2,80 +2,81 @@ package net.pdutta.aoc21
 
 // Problem 6
 fun lifeSupportDiagnostic(diagnosticReportLines: List<String>): Int {
-    return lifeSupportMetricRating(diagnosticReportLines, metric = "oxygen") *
-            lifeSupportMetricRating(diagnosticReportLines, metric = "co2")
+    return metricRating(diagnosticReportLines, metric = "oxygen") *
+            metricRating(diagnosticReportLines, metric = "co2")
 }
 
-fun lifeSupportMetricRating(diagnosticReportLines: List<String>, metric: String): Int {
-    logDebug(
-        "# entering lifeSupportMetricRating() with metric = $metric, " +
-                "diagnosticReportLines has ${diagnosticReportLines.size} items"
-    )
+fun metricRating(binaryLines: List<String>, metric: String): Int {
+    logDebug("entering metricRating() with metric = $metric, binaryLines has ${binaryLines.size} items")
 
-    // start off by looking at all indexes
-    var indexes = diagnosticReportLines.indices.toList()
+    // begin by looking at *all* indices in the input
+    var indicesInScope = binaryLines.indices.toList()
 
-    var zeroList: MutableList<Int>
-    var oneList: MutableList<Int>
+    var indicesWithZeroes: MutableList<Int>
+    var indicesWithOnes: MutableList<Int>
     var charPosition = -1
 
-    while (charPosition < diagnosticReportLines[0].length) {
+    // all lines have equal length
+    val lineLength = binaryLines.first().length
+
+    while (charPosition < lineLength) {
         charPosition++
         logDebug("charPos = $charPosition")
 
-        for (i in indexes) {
-            var count0 = 0
-            var count1 = 0
-            zeroList = mutableListOf()
-            oneList = mutableListOf()
+        var zeroesCount = 0
+        var onesCount = 0
+        indicesWithZeroes = mutableListOf()
+        indicesWithOnes = mutableListOf()
 
-            for (j in indexes) {
-                val line = diagnosticReportLines[j]
-                if (line[charPosition] == '0') {
-                    count0++
-                    zeroList.add(j)
-                } else {
-                    count1++
-                    oneList.add(j)
-                }
-            }
-
-            val selectedChar = if (metric == "oxygen") {
-                // pick the most-common value
-                if (count0 == count1) '=' else if (count0 > count1) '0' else '1'
-            } else if (metric == "co2") {
-                // pick the least-common value
-                if (count0 == count1) '=' else if (count1 > count0) '0' else '1'
-            } else {
-                ' '
-            }
-            logDebug("zeroList = $zeroList")
-            logDebug("oneList = $oneList")
-            val adjective = if (metric == "oxygen") "most" else "least"
-            logDebug("$adjective-common char: $selectedChar")
-
-            val indexList = if (selectedChar == '=') {
-                if (metric == "co2") zeroList else oneList
-            } else {
-                if (selectedChar == '0') zeroList else oneList
-            }
-            logDebug("setting indexes to $indexList")
-            if (indexList.size == 1) {
-                println(
-                    ">> $metric rating: ${diagnosticReportLines[indexList[0]]} (${
-                        diagnosticReportLines[indexList[0]].toInt(
-                            radix = 2
-                        )
-                    })"
-                )
-                return diagnosticReportLines[indexList[0]].toInt(radix = 2)
-            } else {
-                indexes = indexList
-                break
+        for (i in indicesInScope) {
+            val line = binaryLines[i]
+            if (line[charPosition] == '0') {
+                zeroesCount++
+                indicesWithZeroes.add(i)
+            } else { // '1'
+                onesCount++
+                indicesWithOnes.add(i)
             }
         }
+
+        // see https://adventofcode.com/2021/day/3 for what 'bit criteria' means
+        // function returns '=' if zeroesCount == onesCount
+        val bitCriteria = selectBitCriteria(metric, zeroesCount, onesCount)
+
+        logDebug("indices of input lines with zeroes = $indicesWithZeroes")
+        logDebug("indices of input lines with ones = $indicesWithOnes")
+        val adjective = if (metric == "oxygen") "most" else "least"
+        logDebug("$adjective-common char: $bitCriteria")
+
+        val li = if (bitCriteria == '=') {
+            if (metric == "co2") indicesWithZeroes else indicesWithOnes
+        } else {
+            if (bitCriteria == '0') indicesWithZeroes else indicesWithOnes
+        }
+        logDebug("setting indices to $li")
+
+        if (li.size == 1) {
+            val n = binaryLines[li.first()].toInt(radix = 2)
+            println(">> $metric rating: ${binaryLines[li.first()]} ($n)")
+            return n
+        } else {
+            indicesInScope = li
+        }
+
     }
     return -200
+}
+
+private fun selectBitCriteria(metric: String, zeroesCount: Int, onesCount: Int): Char {
+    if (zeroesCount == onesCount) return '='
+    return when (metric) {
+        "oxygen" -> // pick the most-common value
+            if (zeroesCount > onesCount) '0' else '1'
+        "co2" -> // pick the least-common value
+            if (onesCount > zeroesCount) '0' else '1'
+        else ->
+            ' '
+    }
 }
 
 // Problem 5
