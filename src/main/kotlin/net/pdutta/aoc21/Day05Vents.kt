@@ -21,7 +21,6 @@ class Day05Vents(val debug: Boolean = false) {
         return maxCoordinate + 1
     }
 
-    @Suppress("DuplicatedCode")
     private fun overlapCount(ventInput: List<String>, gridSize: Int): Int {
 
         val grid = Grid(gridSize, gridSize)
@@ -35,24 +34,10 @@ class Day05Vents(val debug: Boolean = false) {
             if (x1 == x2 || y1 == y2) {
                 debug("This is a horiz/vert line")
                 if (x1 == x2) {
-                    debug("x1 = x2")
-                    val li = listOf(y1, y2).sorted()
-                    if (this.debug) { println("debug: coords are ") }
-                    for (i in li[0]..li[1]) {
-                        if (this.debug) { print("$x1,$i  ") }
-                        grid[x1, i] = Cell(grid[x1, i]!!.num + 1)
-                    }
-                    if (this.debug) { println("") }
+                    updateGrid(grid, y1, y2, fixedCoord = x1, CoordinateType.X)
                 }
                 if (y1 == y2) {
-                    debug("y1 = y2")
-                    val li = listOf(x1, x2).sorted()
-                    if (this.debug) { println("debug: coords are ") }
-                    for (i in li[0]..li[1]) {
-                        if (this.debug) { print("$i,$y1  ") }
-                        grid[i, y1] = Cell(grid[i, y1]!!.num + 1)
-                    }
-                    if (this.debug) { println("") }
+                    updateGrid(grid, x1, x2, fixedCoord = y1, CoordinateType.Y)
                 }
             } else {
                 debug("not horiz/vert")
@@ -70,13 +55,44 @@ class Day05Vents(val debug: Boolean = false) {
         return overlapCount
     }
 
+    private fun updateGrid(grid: Grid, coord1: Int, coord2: Int, fixedCoord: Int, fixedCoordType: CoordinateType) {
+        val li = listOf(coord1, coord2).sorted()
+
+        debug(if (fixedCoordType == CoordinateType.X) "x1 = x2" else "y1 = y2")
+        trace("debug: coords are ")
+
+        for (i in li[0]..li[1]) {
+            when(fixedCoordType) {
+                CoordinateType.X -> {
+                    trace("$fixedCoord,$i  ")
+                    grid[fixedCoord, i] = Cell(grid[fixedCoord, i]!!.num + 1)
+                }
+                CoordinateType.Y -> {
+                    trace("$i,$fixedCoord  ")
+                    grid[i, fixedCoord] = Cell(grid[i, fixedCoord]!!.num + 1)
+                }
+            }
+        }
+        trace("\n")
+    }
+
     private fun debug(s: String) {
         if (this.debug) {
             Utils.logDebug(s)
         }
     }
 
+    private fun trace(s: String) {
+        if (this.debug) {
+            print(s)
+        }
+    }
+
     companion object {
         private val reg = Regex("""(\d+),(\d+) -> (\d+),(\d+)""")
     }
+}
+
+enum class CoordinateType {
+    X, Y
 }
