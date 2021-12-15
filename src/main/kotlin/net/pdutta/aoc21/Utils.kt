@@ -1,7 +1,9 @@
 package net.pdutta.aoc21
 
-fun logDebug(s: String) {
-    if (debug) {
-        println("debug: $s")
+class Utils {
+    companion object {
+        fun logDebug(s: String) {
+            println("debug: $s")
+        }
     }
 }

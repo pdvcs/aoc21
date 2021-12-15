@@ -4,6 +4,9 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class AoCTest {
+
+    //<editor-fold desc="test data">
+
     private val day1input = "199 200 208 210 200 207 240 269 260 263".split(" ").map { it.toInt() }
     private val day2input = """
                                 forward 5
@@ -35,32 +38,50 @@ internal class AoCTest {
         22 11 13  6  5
          2  0 12  3  7
         """.trimIndent()
+    private val day5input = """
+        0,9 -> 5,9
+        8,0 -> 0,8
+        9,4 -> 3,4
+        2,2 -> 2,1
+        7,0 -> 7,4
+        6,4 -> 2,0
+        0,9 -> 2,9
+        3,4 -> 1,4
+        0,0 -> 8,8
+        5,5 -> 8,2
+        """.trimIndent().split("\n")
+
+    //</editor-fold>
 
     @Test
-    fun testDay01() {
-        println("== testDay01 ==")
-        assertEquals(7, measureSweep(day1input))
-        assertEquals(5, measureSweepWithSlidingWindow(day1input))
-    }
+    fun testDay01To03() {
+        val p = Day01To03(debug = true)
 
-    @Test
-    fun testDay02() {
-        println("== testDay02 ==")
-        assertEquals(150, diveCalc(day2input))
-        assertEquals(900, diveCalcWithAim(day2input))
-    }
+        println("\n== testDay01 ==")
+        assertEquals(7, p.measureSweep(day1input))
+        assertEquals(5, p.measureSweepWithSlidingWindow(day1input))
 
-    @Test
-    fun testDay03() {
-        println("== testDay03 ==")
-        assertEquals(198, binaryDiagnostic(day3input))
-        assertEquals(230, lifeSupportDiagnostic(day3input))
+        println("\n== testDay02 ==")
+        assertEquals(150, p.diveCalc(day2input))
+        assertEquals(900, p.diveCalcWithAim(day2input))
+
+        println("\n== testDay03 ==")
+        assertEquals(198, p.binaryDiagnostic(day3input))
+        assertEquals(230, p.lifeSupportDiagnostic(day3input))
     }
 
     @Test
     fun testDay04() {
-        println("== testDay04 ==")
-        assertEquals(4512, bingoGame(day4input))
-        assertEquals(1924, reverseBingo(day4input))
+        println("\n== testDay04 ==")
+        val p = Day04Bingo(debug = true)
+        assertEquals(4512, p.bingoGame(day4input))
+        assertEquals(1924, p.reverseBingo(day4input))
+    }
+
+    @Test
+    fun testDay05() {
+        println("\n== testDay05 ==")
+        val p = Day05Vents(debug = true)
+        assertEquals(5, p.overlappingVents(day5input))
     }
 }

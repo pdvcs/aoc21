@@ -2,7 +2,7 @@ package net.pdutta.aoc21
 
 data class Cell(val num: Int, var marked: Boolean = false)
 
-class BingoGrid(private val rows: Int, private val columns: Int) {
+class Grid(private val rows: Int, private val columns: Int) {
     private var grid = Array(rows) { Array(columns) { Cell(0, false)  } }
 
     operator fun get(r: Int, c: Int): Cell? {
@@ -26,7 +26,7 @@ class BingoGrid(private val rows: Int, private val columns: Int) {
             }
             cols.add(col.toList())
         }
-        return cols
+        return cols.toList()
     }
 
     private fun eachRow(): Sequence<Array<Cell>> = sequence {
@@ -56,13 +56,25 @@ class BingoGrid(private val rows: Int, private val columns: Int) {
     }
 
     override fun toString(): String {
+        return str()
+    }
+
+    internal fun str(displayType: String = ""): String {
         val output = StringBuffer()
         for (r in eachRow()) {
             r.forEach { c ->
-                output.append("%3d".format(c.num)).append(if (c.marked) "*" else " ").append(" ")
+                if (displayType == ShowZeroesAsDots && c.num == 0) {
+                    output.append("  .  ")
+                } else {
+                    output.append("%3d".format(c.num)).append(if (c.marked) "*" else " ").append(" ")
+                }
             }
             output.append("\n")
         }
         return output.toString()
+    }
+
+    companion object {
+        const val ShowZeroesAsDots = "ShowZeroesAsDots"
     }
 }

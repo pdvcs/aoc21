@@ -4,38 +4,39 @@ import java.io.File
 
 // AoC 2021 - https://adventofcode.com/2021
 
-var debug = false
-
 fun main() {
-    day01()
-    day02()
-    day03()
+    day01To03()
     day04()
+    day05()
+}
+
+fun day05() {
+    val p = Day05Vents()
+
+    val ventInput = File("src/main/resources/input05.txt").readText(Charsets.UTF_8).split("\n")
+    println("Problem 9: ${p.overlappingVents(ventInput)}")
 }
 
 fun day04() {
-    val gameInput = File("src/main/resources/input04.txt").readText(Charsets.UTF_8)
-    println("Problem 7: ${bingoGame(gameInput)}")
-    println("Problem 8: ${reverseBingo(gameInput)}")
+    val p = Day04Bingo()
+
+    val bingoInput = File("src/main/resources/input04.txt").readText(Charsets.UTF_8)
+    println("Problem 7: ${p.bingoGame(bingoInput)}")
+    println("Problem 8: ${p.reverseBingo(bingoInput)}")
 }
 
-fun day03() {
-    val commands = File("src/main/resources/input03.txt").readText(Charsets.UTF_8)
-    val diagList = commands.split("\n")
-    println("Problem 5: ${binaryDiagnostic(diagList)}")
-    println("Problem 6: ${lifeSupportDiagnostic(diagList)}")
-}
+fun day01To03() {
+    val p = Day01To03()
 
-fun day02() {
-    val commands = File("src/main/resources/input02.txt").readText(Charsets.UTF_8)
-    val clist = commands.split("\n")
-    println("Problem 3: ${diveCalc(clist)}")
-    println("Problem 3: ${diveCalcWithAim(clist)}")
-}
+    val day1input = File("src/main/resources/input01.txt").readText(Charsets.UTF_8).split("\n").map { it.toInt() }
+    println("Problem 1: ${p.measureSweep(day1input)}")
+    println("Problem 2: ${p.measureSweepWithSlidingWindow(day1input)}")
 
-fun day01() {
-    val report = File("src/main/resources/input01.txt").readText(Charsets.UTF_8)
-    val ms = report.split("\n").map { it.toInt() }
-    println("Problem 1: ${measureSweep(ms)}")
-    println("Problem 2: ${measureSweepWithSlidingWindow(ms)}")
+    val day2input = File("src/main/resources/input02.txt").readText(Charsets.UTF_8).split("\n")
+    println("Problem 3: ${p.diveCalc(day2input)}")
+    println("Problem 4: ${p.diveCalcWithAim(day2input)}")
+
+    val day3input = File("src/main/resources/input03.txt").readText(Charsets.UTF_8).split("\n")
+    println("Problem 5: ${p.binaryDiagnostic(day3input)}")
+    println("Problem 6: ${p.lifeSupportDiagnostic(day3input)}")
 }
