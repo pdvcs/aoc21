@@ -82,6 +82,7 @@ internal class AoCTest {
     fun testDay05() {
         println("\n== testDay05 ==")
         val p = Day05Vents(debug = true)
-        assertEquals(5, p.overlappingVents(day5input))
+        assertEquals(5, p.overlappingVents(day5input, countDiagonals = false))
+        assertEquals(12, p.overlappingVents(day5input, countDiagonals = true))
     }
 }

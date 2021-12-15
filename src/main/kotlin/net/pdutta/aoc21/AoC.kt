@@ -14,7 +14,8 @@ fun day05() {
     val p = Day05Vents()
 
     val ventInput = File("src/main/resources/input05.txt").readText(Charsets.UTF_8).split("\n")
-    println("Problem 9: ${p.overlappingVents(ventInput)}")
+    println("Problem 9: ${p.overlappingVents(ventInput, countDiagonals = false)}")
+    println("Problem 10: ${p.overlappingVents(ventInput, countDiagonals = true)}")
 }
 
 fun day04() {
